@@ -15,11 +15,6 @@ app.secret_key = "invcloak"
 api = Api(app)
 
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
-
 # initiate a JWT object, that going to use app, authenticate and identity func TOGETHER
 jwt = JWT(app, authenticate, identity)  # create new endpoint: /auth
 
