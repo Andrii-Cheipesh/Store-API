@@ -1,4 +1,5 @@
 import os
+import re
 
 from flask import Flask
 from flask_restful import Api
@@ -9,9 +10,11 @@ from resourses.user import UserRegister
 from resourses.item import Item, ItemAll
 from resourses.store import Store, StoresAll
 
-
+uri = os.getenv('DATABASE_URL')
+if uri and uri.startswith('postgres://'):
+    uri = uri.replace('postgres://', 'postgresql://', 1)
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(uri, 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "invcloak"
 api = Api(app)
