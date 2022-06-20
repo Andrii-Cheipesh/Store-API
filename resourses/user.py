@@ -20,6 +20,7 @@ class UserRegister(Resource):
     )
 
     def post(self):
+
         data = UserRegister.parser.parse_args()
 
         if UserModel.find_by_username(data['username']):
@@ -29,3 +30,21 @@ class UserRegister(Resource):
         user.save_to_db()
 
         return {"message": "User created successfully."}, 201
+
+
+class UserTest(Resource):
+
+    @classmethod
+    def get(cls, user_id):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return {"message:": "User not found."}, 404
+        return user.json()
+
+    @classmethod
+    def delete(cls, user_id):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return {"message:": "User not found."}, 404
+        user.delete_from_db()
+        return {'message': 'User deleted successfully.'}, 200

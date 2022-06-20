@@ -1,12 +1,12 @@
 import os
-import re
+# import re
 
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
 
 from security import authenticate, identity
-from resourses.user import UserRegister
+from resourses.user import UserRegister, UserTest
 from resourses.item import Item, ItemAll
 from resourses.store import Store, StoresAll
 
@@ -37,6 +37,7 @@ api.add_resource(Store, "/store/<string:name>")
 api.add_resource(StoresAll, "/stores")
 api.add_resource(ItemAll, "/items")
 api.add_resource(UserRegister, "/register")
+api.add_resource(UserTest, "/user/<int:user_id>")
 
 
 if __name__ == "__main__":
