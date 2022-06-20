@@ -29,7 +29,7 @@ class Item(Resource):
         item = ItemModel.find_item_by_name(name)
 
         if item:
-            return item.json_with_store()
+            return item.json()
         return {"message": "Item not found."}, 404
 
     def post(self, name):
@@ -39,7 +39,7 @@ class Item(Resource):
 
         data = Item.parser.parse_args()
 
-        item = ItemModel(name, data["price"], data['store_id'])
+        item = ItemModel(name, **data)
         try:
             item.save_to_db()
         except:
@@ -61,7 +61,7 @@ class Item(Resource):
         item = ItemModel.find_item_by_name(name)
 
         if item is None:
-            item = ItemModel(name, data['price'], data['store_id'])
+            item = ItemModel(name, **data)
         else:
             item.price = data['price']
             item.store_id = data['store_id']
@@ -74,4 +74,4 @@ class Item(Resource):
 class ItemAll(Resource):
     # here we have just one endpoint - get
     def get(self):
-        return {'items': [item.json() for item in ItemModel.query.all()]}
+        return {'items': [item.json() for item in ItemModel.find_all()]}

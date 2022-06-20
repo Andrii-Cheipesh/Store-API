@@ -17,19 +17,26 @@ class ItemModel(db.Model):
         self.price = price
         self.store_id = store_id
 
+    # may be deleted
     def json(self):
-        return {"name": self.name, "price": self.price}
-
-    def json_with_store(self):
         try:
-            store = self.store.name
+            store_id = self.store_id
         except:
-            store = 'No store with this ID yet.'
-        return {"name": self.name, "price": self.price, "store": store}
+            store_id = "Store with that ID not created yet."
+        return {
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "store_id": store_id
+        }
 
     @classmethod
     def find_item_by_name(cls, name):
         return cls.query.filter_by(name=name).first()  # returning an ItemModel object from db
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
 
     def delete_from_db(self):
         db.session.delete(self)
@@ -38,4 +45,4 @@ class ItemModel(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
-#test for commit
+# test for commit
